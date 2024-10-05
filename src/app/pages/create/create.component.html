@@ -1,0 +1,8 @@
+<div class="w-full h-screen flex flex-col items-center justify-center gap-8">
+  <div class="w-full flex flex-row items-center justify-center gap-4">
+    <input type="text" class="input input-bordered w-1/2" [(ngModel)]="qrData" />
+  </div>
+  @if (qrData) {
+  <qrcode [qrdata]="qrData" [width]="256"></qrcode>
+  }
+</div>
