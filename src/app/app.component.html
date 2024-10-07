@@ -1,1 +1,12 @@
-<router-outlet></router-outlet>
+<div class="w-full flex flex-col items-stretch py-8">
+  <div class="flex flex-row w-full justify-between items-center px-4 mb-8">
+    <button class="btn btn-circle" [ngClass]="{ 'btn-primary': !router.url.startsWith('/create') }" routerLink="/">
+      <i class="fas fa-fw fa-home"></i>
+    </button>
+    <img src="assets/hitster.webp" alt="" class="w-40" />
+    <button class="btn btn-circle" [ngClass]="{ 'btn-primary': router.url.startsWith('/create') }" routerLink="/create">
+      <i class="fas fa-fw fa-plus"></i>
+    </button>
+  </div>
+  <router-outlet></router-outlet>
+</div>

@@ -1,1 +1,3 @@
-<a routerLink="/create">Erstellen</a>
+<div class="absolute inset-0 w-full px-8 flex justify-center items-center -z-10">
+  <zxing-scanner (scanSuccess)="scan($event)" class="sm:w-[500px]"></zxing-scanner>
+</div>
