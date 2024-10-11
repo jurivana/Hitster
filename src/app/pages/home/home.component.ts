@@ -1,24 +1,41 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, signal, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterModule, ZXingScannerModule],
+  imports: [RouterModule, ZXingScannerModule, CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+  lastScan: string;
+  url = signal<string>('');
+
   constructor() {}
 
-  scan(qrData: string): void {
-    if (qrData.length === 36) {
-      window.open(`https://www.youtube.com/clip/${qrData}`);
-    } else if (qrData.length === 11) {
-      window.open(`https://www.youtube.com/watch?v=${qrData}`);
-    } else {
-      window.open(qrData, '_blank');
+  scanSuccess(qrData: string): void {
+    if (qrData === this.lastScan) {
+      return;
     }
+    this.lastScan = qrData;
+    if (qrData.length === 36) {
+      this.url.set(`https://www.youtube.com/clip/${qrData}`);
+    } else if (qrData.length === 11) {
+      this.url.set(`https://www.youtube.com/watch?v=${qrData}`);
+    } else {
+      this.url.set(qrData);
+    }
+  }
+
+  openUrl(): void {
+    window.open(this.url());
+    this.url.set('');
+  }
+
+  scanFailure() {
+    this.lastScan = '';
   }
 }

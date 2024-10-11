@@ -1,3 +1,6 @@
-<div class="absolute inset-0 w-full px-8 flex justify-center items-center -z-10">
-  <zxing-scanner (scanSuccess)="scan($event)" class="sm:w-[500px]"></zxing-scanner>
+<div class="absolute inset-0 px-8 flex justify-center items-center -z-10">
+  <zxing-scanner (scanSuccess)="scanSuccess($event)" (scanFailure)="scanFailure()" class="sm:w-[500px]"></zxing-scanner>
 </div>
+@if (url()) {
+  <div class="fixed inset-0 highlight" (click)="openUrl()"></div>
+}
