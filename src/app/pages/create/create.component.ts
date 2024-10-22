@@ -1,12 +1,13 @@
-import { Component, ElementRef, signal, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, signal, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { Card } from '../../models';
-import { NgxQrcodeStylingModule } from 'ngx-qrcode-styling';
+import { Card, QRTemplates, QRFrames } from '../../models';
+import { FrameStyle, NgxQrcodeStylingModule, TemplateType } from 'ngx-qrcode-styling';
 import html2canvas from 'html2canvas-pro';
 import { PageSizes, PDFDocument } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import { Demo } from './demo';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-create',
@@ -23,8 +24,31 @@ export class CreateComponent {
   clipTitle = signal<string>('');
   cards = signal<Card[]>([]);
 
+  qrTemplate = signal<TemplateType>('angular');
+  qrFrame = signal<FrameStyle>('F_062');
+  hideQR = false;
+
   constructor() {
-    this.cards.set(Demo);
+    if (!environment.production) {
+      this.cards.set(Demo);
+    }
+
+    effect(() => {
+      if (QRTemplates.includes(this.qrTemplate())) {
+        this.hideQR = true;
+        setTimeout(() => {
+          this.hideQR = false;
+        }, 0);
+      }
+    });
+    effect(() => {
+      if (QRFrames.includes(this.qrFrame())) {
+        this.hideQR = true;
+        setTimeout(() => {
+          this.hideQR = false;
+        }, 0);
+      }
+    });
   }
 
   addCard(): void {
@@ -46,6 +70,13 @@ export class CreateComponent {
     ]);
     this.url.set('');
     this.clipTitle.set('');
+  }
+
+  deleteCard(index: number): void {
+    this.cards.update((cards) => {
+      cards.splice(index, 1);
+      return cards;
+    });
   }
 
   async generatePDF(): Promise<void> {
