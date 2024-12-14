@@ -88,7 +88,7 @@ export class CreateComponent {
     const imageFront = await pdfDoc.embedPng(canvasFront.toDataURL('image/png'));
     page1.drawImage(imageFront, {
       width: 540,
-      height: 180 * (Math.floor(this.cards().length / 3) + 1),
+      height: 180 * Math.ceil(this.cards().length / 3),
       x: 25,
       y: 60
     });
@@ -98,12 +98,12 @@ export class CreateComponent {
     const imageBack = await pdfDoc.embedPng(canvasBack.toDataURL('image/png'));
     page2.drawImage(imageBack, {
       width: 540,
-      height: 180 * (Math.floor(this.cards().length / 3) + 1),
+      height: 180 * Math.ceil(this.cards().length / 3),
       x: 30.28,
       y: 60
     });
 
     const pdfBytes = await pdfDoc.save();
-    saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'hitster.png');
+    saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'hitster.pdf');
   }
 }
